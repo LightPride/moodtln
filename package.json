@@ -1,0 +1,24 @@
+{
+  "name": "moodtln",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LightPride/moodtln.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LightPride/moodtln/issues"
+  },
+  "homepage": "https://github.com/LightPride/moodtln#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
