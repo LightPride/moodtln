@@ -462,7 +462,7 @@
         <div class="filter-group">
             <span class="filter-group-title">What are you looking for</span>
             <div class="filter-options">
-                <label><input type="checkbox" data-group="style" value="Basics"><span class="filter-pill">Basics</span></label>
+                <label><input type="checkbox" data-group="style" value="Minimalist"><span class="filter-pill">Minimalist</span></label>
                 <label><input type="checkbox" data-group="style" value="Unique finds"><span class="filter-pill">Unique finds</span></label>
                 <label><input type="checkbox" data-group="style" value="Vintage style"><span class="filter-pill">Vintage style</span></label>
                 <label><input type="checkbox" data-group="style" value="Y2K style"><span class="filter-pill">Y2K style</span></label>
@@ -475,6 +475,7 @@
             <span class="filter-group-title">Location</span>
             <div class="filter-options">
                 <label><input type="checkbox" id="nearMe"><span class="filter-pill">Near me</span></label>
+                <label><input type="checkbox" id="openNow"><span class="filter-pill">Open now</span></label>
             </div>
         </div>
     </div>
@@ -488,13 +489,20 @@
     </div>
 
     <script>
+        // Hours format: { day: [openHour, openMin, closeHour, closeMin] }
+        // Days: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
         const shops = [
             {
                 name: 'Sarapuu kirbukas',
                 address: 'Ristiku tn 12, 10612 Tallinn',
                 lat: 59.43681,
                 lng: 24.71941,
-                filters: { style: ['Basics'], price: ['€€'] },
+                filters: { style: ['Minimalist'], price: ['€€'] },
+                hours: {
+                    1: [11, 0, 19, 0], 2: [11, 0, 19, 0], 3: [11, 0, 19, 0],
+                    4: [11, 0, 19, 0], 5: [11, 0, 19, 0],
+                    6: [11, 0, 17, 0], 0: [11, 0, 17, 0],
+                },
             },
             {
                 name: 'Boriseva vintage',
@@ -502,6 +510,11 @@
                 lat: 59.42481,
                 lng: 24.74391,
                 filters: { style: ['Unique finds', 'Vintage style'], price: ['€€'] },
+                hours: {
+                    0: [11, 0, 19, 0], 1: [11, 0, 19, 0], 2: [11, 0, 19, 0],
+                    3: [11, 0, 19, 0], 4: [11, 0, 19, 0], 5: [11, 0, 19, 0],
+                    6: [11, 0, 19, 0],
+                },
             },
             {
                 name: 'Retro & Vintage',
@@ -509,13 +522,18 @@
                 lat: 59.41037,
                 lng: 24.73623,
                 filters: { style: ['Vintage style'], price: ['€€'] },
+                hours: null,
             },
             {
                 name: 'Kat & Nat Store',
                 address: 'Narva mnt 23, 10120 Tallinn',
                 lat: 59.43853,
                 lng: 24.77001,
-                filters: { style: ['Y2K style', 'Unique finds'], price: ['€€€'] },
+                filters: { style: ['Y2K style', 'Unique finds'], price: ['€€'] },
+                hours: {
+                    4: [12, 0, 18, 0], 5: [12, 0, 18, 0],
+                    6: [12, 0, 18, 0], 0: [12, 0, 18, 0],
+                },
             },
             {
                 name: 'The Basaar',
@@ -523,6 +541,11 @@
                 lat: 59.44089,
                 lng: 24.73384,
                 filters: { style: ['Unique finds', 'Designer stuff'], price: ['€€€'] },
+                hours: {
+                    1: [11, 0, 19, 0], 2: [11, 0, 19, 0], 3: [11, 0, 19, 0],
+                    4: [11, 0, 19, 0], 5: [11, 0, 19, 0], 6: [11, 0, 19, 0],
+                    0: [11, 0, 17, 0],
+                },
             },
             {
                 name: 'Suur Seoul',
@@ -530,6 +553,11 @@
                 lat: 59.43984,
                 lng: 24.72885,
                 filters: { style: ['Streetwear', 'Vintage style'], price: ['€€'] },
+                hours: {
+                    1: [11, 0, 19, 0], 2: [11, 0, 19, 0], 3: [11, 0, 19, 0],
+                    4: [11, 0, 19, 0], 5: [11, 0, 19, 0],
+                    6: [11, 0, 17, 0], 0: [11, 0, 17, 0],
+                },
             },
             {
                 name: 'Northern Grip Tallinn',
@@ -537,6 +565,11 @@
                 lat: 59.43489,
                 lng: 24.74619,
                 filters: { style: ['Vintage style', 'Unique finds'], price: ['€€€'] },
+                hours: {
+                    1: [10, 0, 21, 0], 2: [10, 0, 21, 0], 3: [10, 0, 21, 0],
+                    4: [10, 0, 21, 0], 5: [10, 0, 21, 0], 6: [10, 0, 21, 0],
+                    0: [10, 0, 19, 0],
+                },
             },
             {
                 name: 'Northern Grip Tallinn',
@@ -544,6 +577,11 @@
                 lat: 59.43164,
                 lng: 24.76092,
                 filters: { style: ['Vintage style', 'Unique finds'], price: ['€€€'] },
+                hours: {
+                    1: [10, 0, 21, 0], 2: [10, 0, 21, 0], 3: [10, 0, 21, 0],
+                    4: [10, 0, 21, 0], 5: [10, 0, 21, 0], 6: [10, 0, 21, 0],
+                    0: [10, 0, 19, 0],
+                },
             },
             {
                 name: 'Kopli Couture',
@@ -551,6 +589,11 @@
                 lat: 59.43826,
                 lng: 24.72927,
                 filters: { style: ['Designer stuff', 'Unique finds'], price: ['€€€'] },
+                hours: {
+                    0: [11, 0, 19, 0], 1: [11, 0, 19, 0], 2: [11, 0, 19, 0],
+                    3: [11, 0, 19, 0], 4: [11, 0, 19, 0],
+                    5: [11, 0, 26, 0], 6: [11, 0, 26, 0],
+                },
             },
             {
                 name: 'RiiSaikel',
@@ -558,13 +601,23 @@
                 lat: 59.42541,
                 lng: 24.74433,
                 filters: { style: ['Clean girl style'], price: ['€€'] },
+                hours: {
+                    1: [12, 0, 19, 0], 2: [12, 0, 19, 0], 3: [12, 0, 19, 0],
+                    4: [12, 0, 19, 0], 5: [12, 0, 19, 0],
+                    6: [12, 0, 17, 0],
+                },
             },
             {
                 name: 'Paavli Kaltsukas',
                 address: 'Paavli tn 6, 10412 Tallinn',
                 lat: 59.44818,
                 lng: 24.70501,
-                filters: { style: ['Basics'], price: ['€'] },
+                filters: { style: ['Minimalist'], price: ['€'] },
+                hours: {
+                    1: [10, 0, 19, 0], 2: [10, 0, 19, 0], 3: [10, 0, 19, 0],
+                    4: [10, 0, 19, 0], 5: [10, 0, 19, 0], 6: [10, 0, 19, 0],
+                    0: [10, 0, 18, 0],
+                },
             },
         ];
 
@@ -575,6 +628,19 @@
         let directionsRenderer = null;
         const defaultCenter = { lat: 59.437, lng: 24.7536 };
         const defaultZoom = 13;
+
+        function isOpenNow(shop) {
+            if (!shop.hours) return true;
+            // Tallinn is Europe/Tallinn (EET/EEST)
+            const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Tallinn' }));
+            const day = now.getDay();
+            const h = shop.hours[day];
+            if (!h) return false;
+            const mins = now.getHours() * 60 + now.getMinutes();
+            const open = h[0] * 60 + h[1];
+            const close = h[2] * 60 + h[3];
+            return mins >= open && mins < close;
+        }
 
         function createMarkerContent() {
             const container = document.createElement('div');
@@ -593,6 +659,37 @@
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         }
 
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        function formatTime(h, m) {
+            const period = h >= 12 && h < 24 ? 'pm' : 'am';
+            const hour = h > 24 ? h - 24 : (h % 12 || 12);
+            return hour + (m ? ':' + String(m).padStart(2, '0') : '') + period;
+        }
+
+        function buildHoursHtml(shop) {
+            if (!shop.hours) return '<div style="margin-top:8px"><span style="font-size:11px;font-weight:600;color:#16a34a">Open 24/7</span></div>';
+            const open = isOpenNow(shop);
+            let html = '<div style="margin-top:8px">' +
+                '<span style="font-size:11px;font-weight:600;color:' + (open ? '#16a34a' : '#dc2626') + '">' +
+                (open ? 'Open now' : 'Closed') + '</span>' +
+                '<div style="margin-top:4px;font-size:11px;color:#666;line-height:1.6">';
+            for (let d = 1; d <= 7; d++) {
+                const day = d % 7;
+                const h = shop.hours[day];
+                const label = dayNames[day];
+                if (h) {
+                    const closeH = h[2] > 24 ? h[2] - 24 : h[2];
+                    html += '<div><span style="display:inline-block;width:32px;font-weight:500">' + label + '</span> ' +
+                        formatTime(h[0], h[1]) + ' – ' + formatTime(closeH, h[3]) + '</div>';
+                } else {
+                    html += '<div><span style="display:inline-block;width:32px;font-weight:500">' + label + '</span> Closed</div>';
+                }
+            }
+            html += '</div></div>';
+            return html;
+        }
+
         function buildInfoContent(shop) {
             const styles = (shop.filters.style || []).join(', ');
             const price = (shop.filters.price || []).join(', ');
@@ -605,6 +702,7 @@
                         return '<span style="background:#f1f3f4;color:#444;padding:2px 8px;border-radius:12px;font-size:11px">' + s + '</span>';
                     }).join('') : '') +
                 '</div>' +
+                buildHoursHtml(shop) +
                 '<button onclick="directionsTo(' + shop.lat + ',' + shop.lng + ')" ' +
                     'style="margin-top:10px;width:100%;padding:7px 0;background:#4285F4;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer">' +
                     'Get directions' +
@@ -785,6 +883,8 @@
                 cb.addEventListener('change', () => applyFilters());
             });
 
+            document.getElementById('openNow').addEventListener('change', () => applyFilters());
+
             document.getElementById('nearMe').addEventListener('change', (e) => {
                 if (e.target.checked) {
                     if (userLocation) {
@@ -856,6 +956,7 @@
         function applyFilters() {
             const activeFilters = {};
             const nearMeActive = document.getElementById('nearMe').checked && userLocation;
+            const openNowActive = document.getElementById('openNow').checked;
 
             document.querySelectorAll('#filters input[type="checkbox"][data-group]:checked').forEach((cb) => {
                 const group = cb.dataset.group;
@@ -864,14 +965,19 @@
             });
 
             const hasStyleFilters = Object.keys(activeFilters).length > 0;
+            const hasAnyFilter = hasStyleFilters || openNowActive || nearMeActive;
 
-            // Get shops that match style/price filters
+            // Get shops that match style/price/open filters
             const matchingEntries = markers.filter(({ shop }) => {
-                if (!hasStyleFilters) return true;
-                return Object.entries(activeFilters).every(([group, values]) => {
-                    const shopValues = shop.filters[group] || [];
-                    return values.some((v) => shopValues.includes(v));
-                });
+                if (hasStyleFilters) {
+                    const matches = Object.entries(activeFilters).every(([group, values]) => {
+                        const shopValues = shop.filters[group] || [];
+                        return values.some((v) => shopValues.includes(v));
+                    });
+                    if (!matches) return false;
+                }
+                if (openNowActive && !isOpenNow(shop)) return false;
+                return true;
             });
 
             if (nearMeActive) {
@@ -916,7 +1022,7 @@
                     if (visible) visibleEntries.push({ shop, marker });
                 });
 
-                if (!hasStyleFilters) {
+                if (!hasAnyFilter) {
                     updateShopList([]);
                     mapInstance.setCenter(defaultCenter);
                     mapInstance.setZoom(defaultZoom);
